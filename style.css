@@ -1,0 +1,27 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+canvas {
+  display: block;
+}
+
+.yomogi-regular {
+  font-family: "Yomogi", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+body, button, input {
+  font-family: 'Yomogi', serif;
+}
+
+button {
+  background-color: #3498db;
+  color: #ffffff;
+  border: none;
+  padding: 5px 20px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 20px;
+}
