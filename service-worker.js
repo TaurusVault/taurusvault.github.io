@@ -80,7 +80,6 @@ const urlsToCache = [
   "./owtextures/watermelon_ow.png"
 ];
 
-
 /* 
   Service Worker install event:
   - Opens the specified cache
@@ -90,10 +89,8 @@ self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll(urlsToCache);
-      
     })
-  ).catch(error => {
-        console.error('Failed to cache assets:', error);
+  );
 });
 
 /* 
