@@ -92,8 +92,7 @@ self.addEventListener("install", event => {
       return cache.addAll(urlsToCache);
       
     })
-  ).catch(error => {
-        console.error('Failed to cache assets:', error);
+  );
 });
 
 /* 
