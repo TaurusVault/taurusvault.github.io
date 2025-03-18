@@ -1,8 +1,7 @@
 /* service-worker.js */
 var GHPATH = '/taurusvault.github.io';
 var APP_PREFIX = 'ffpwa_';
-const CACHE_NAME = "p5-app-cache-v2";
-var VERSION = 'version_02';
+var VERSION = 'version_03';
 /*
   We list every asset we want to pre-cache:
   - Root index and optional manifest
@@ -13,7 +12,7 @@ var VERSION = 'version_02';
   - “Ow” fruit textures in ./owtextures
   - (Optional) The service worker itself
 */
-const urlsToCache = [
+var URLS = [
   // Basic pages/assets
   "./",               // Root so offline can load the site
   "./index.html",
@@ -92,39 +91,68 @@ const urlsToCache = [
   - Opens the specified cache
   - Pre-caches all the files in urlsToCache
 */
+var URLS = [
+  '/', // root of the site (to cache index.html)
+  'index.html',
+  'style.css',
+  'sketch.js',
+  'manifest.webmanifest',
+  'normtextures/blueberry.png',
+  'normtextures/cranberry.png',
+  'normtextures/lychee.png',
+  'normtextures/strawberry.png',
+  'normtextures/kiwi.png',
+  'normtextures/lemon.png',
+  'normtextures/mangosteen.png',
+  'normtextures/passionfruit.png',
+  'normtextures/peach.png',
+  'normtextures/apple.png',
+  'normtextures/orange.png',
+  'normtextures/grapefruit.png',
+  'normtextures/guava.png',
+  'normtextures/avocado.png',
+  'normtextures/pomegranate.png',
+  'normtextures/pear.png',
+  'normtextures/mango.png',
+  'normtextures/dragonfruit.png',
+  'normtextures/honeydew.png',
+  'normtextures/papaya.png',
+  'normtextures/coconut.png',
+  'normtextures/watermelon.png',
+  'owtextures/blueberry_ow.png',
+  'owtextures/cranberry_ow.png',
+  // ... add the rest of your "ow" textures as needed
+];
+
+const CACHE_NAME = 'pwa-cache-v1';
+
+function addResourcesToCache(resources) {
+  return caches.open(CACHE_NAME).then(cache => {
+    return Promise.all(
+      resources.map(url => {
+        return fetch(url)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`Request for ${url} returned a ${response.status}`);
+            }
+            return cache.put(url, response);
+          })
+          .catch(error => {
+            console.error('Failed to cache:', url, error);
+            return Promise.resolve();
+          });
+      })
+    );
+  });
+}
+
 self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      // Use Promise.all with map to cache each URL separately.
-      return Promise.all(
-        urlsToCache.map(url => {
-          return fetch(url)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`Request for ${url} returned a ${response.status}`);
-              }
-              return cache.put(url, response);
-            })
-            .catch(error => {
-              console.error('Failed to cache:', url, error);
-              // Optionally return a resolved promise so that one failure doesn’t reject the whole Promise.all.
-              return Promise.resolve();
-            });
-        })
-      );
-    })
+  event.waitUntil(addResourcesToCache(URLS));
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => response || fetch(event.request))
   );
 });
 
-/* 
-  Service Worker fetch event:
-  - Tries to match the request in cache
-  - Falls back to the network if not found
-*/
-self.addEventListener("fetch", event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      return response || fetch(event.request);
-    })
-  );
-});
