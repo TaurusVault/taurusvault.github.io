@@ -1,6 +1,15 @@
 {
   "name": "FizzyFruity",
   "short_name": "FFPWA",
+
+  "scope": "/taurusvault.github.io/",
+  "start_url": "/taurusvault.github.io/",
+
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+
+  "display": "standalone", 
+
   "icons": [
     {
       "src": "logo192.png",
