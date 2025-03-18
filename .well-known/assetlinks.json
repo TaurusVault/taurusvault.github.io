@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.taurusvault.twa",
+        "sha256_cert_fingerprints": ["EA:B7:EE:68:AD:47:20:97:D7:AC:9B:E6:64:DF:EE:87:57:25:BD:6D:21:71:DA:51:7F:9E:96:2A:43:F0:9E:E5"]
+      }
+    }]
