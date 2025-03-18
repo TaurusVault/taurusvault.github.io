@@ -2,7 +2,7 @@
 var GHPATH = '/taurusvault.github.io';
 var APP_PREFIX = 'ffpwa_';
 const CACHE_NAME = "p5-app-cache-v1";
-var VERSION = 'version_00';
+var VERSION = 'version_01';
 /*
   We list every asset we want to pre-cache:
   - Root index and optional manifest
