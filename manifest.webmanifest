@@ -26,15 +26,14 @@
   "screenshots": [
     {
       "src": "screenshot-wide.png",
-      "sizes": "1920x1080",       // The actual size of the screenshot file
+      "sizes": "1920x1080",       
       "type": "image/png",
-      "form_factor": "wide"       // For desktop
+      "form_factor": "wide"      
     },
     {
       "src": "screenshot-narrow.png",
       "sizes": "600x800",
       "type": "image/png"
-      // no form_factor or "form_factor": "narrow" for mobile
     }
   ]
 }
