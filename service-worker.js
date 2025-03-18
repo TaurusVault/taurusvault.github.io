@@ -1,8 +1,8 @@
 /* service-worker.js */
 var GHPATH = '/taurusvault.github.io';
 var APP_PREFIX = 'ffpwa_';
-const CACHE_NAME = "p5-app-cache-v1";
-var VERSION = 'version_01';
+const CACHE_NAME = "p5-app-cache-v2";
+var VERSION = 'version_02';
 /*
   We list every asset we want to pre-cache:
   - Root index and optional manifest
@@ -17,13 +17,18 @@ const urlsToCache = [
   // Basic pages/assets
   "./",               // Root so offline can load the site
   "./index.html",
-  "./manifest.json",  // If you have a web app manifest
+  "./manifest.webmanifest",  // If you have a web app manifest
   "./styles.css",     // Adjust if your CSS is named differently
   "./sketch.js",      // Main p5 or your custom JS
   "./service-worker.js", // Optional: to cache the SW itself
   "./p5.sound.min.js",
+  "./logo192.png",
+  "./logo512.png",
   "./logo.png",
+  "./screenshot-narrow.png",
+  "./screenshot-wide.png",
   "./p5.js",
+  "./README.md",
 
   // Audio
   "./audio/BGM_Tranquil.mp3",
@@ -87,11 +92,26 @@ const urlsToCache = [
   - Opens the specified cache
   - Pre-caches all the files in urlsToCache
 */
-self.addEventListener("install", event => {
+self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(urlsToCache);
-      
+      // Use Promise.all with map to cache each URL separately.
+      return Promise.all(
+        urlsToCache.map(url => {
+          return fetch(url)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`Request for ${url} returned a ${response.status}`);
+              }
+              return cache.put(url, response);
+            })
+            .catch(error => {
+              console.error('Failed to cache:', url, error);
+              // Optionally return a resolved promise so that one failure doesn’t reject the whole Promise.all.
+              return Promise.resolve();
+            });
+        })
+      );
     })
   );
 });
