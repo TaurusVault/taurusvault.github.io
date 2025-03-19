@@ -358,14 +358,14 @@ function setup() {
   }
   
   funToggleButton = createButton('Mode: ' + modeNames[currentModeIndex]);
-  funToggleButton.position(20, 655);
+  funToggleButton.position(20, windowHeight - 115);
   funToggleButton.class('alt-ui-button');
   funToggleButton.mousePressed(toggleMode);
   funToggleButton.style('z-index', '1000');
   funToggleButton.hide();
   
   languageToggleButton = createButton('Language: ' + languageNames[currentLanguage]);
-  languageToggleButton.position(20, 710);
+  languageToggleButton.position(20, windowHeight - 60);
   languageToggleButton.class('alt-ui-button');
   languageToggleButton.mousePressed(toggleLanguage);
   languageToggleButton.style('z-index', '1000');
@@ -705,8 +705,8 @@ function draw() {
       let horizontalSpacing = 160;  // adjust for horizontal spacing
       let verticalSpacing = 50;     // adjust for vertical spacing
       let startX = width / 2 - 100 - horizontalSpacing / 2;
-      let startY_top = height / 2 - 245 - verticalSpacing / 2;
-      let startY_bottom = height / 2 - 245 + verticalSpacing / 2;
+      let startY_top = waterLevel - 110; // 100 pixels above the water level
+      let startY_bottom = startY_top + verticalSpacing;
       
       for (let i = 0; i < choices.length; i++) {
         let btn = createButton(choices[i]);
@@ -1007,4 +1007,9 @@ function checkAnswer() {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+  funToggleButton.position(20, windowHeight - 115);
+  languageToggleButton.position(20, windowHeight - 60);
+  startButton.position(width/2, height/2 + 50);
+  menuFunModeButton.position(width/2, height/2 + 110);
+  menuLanguageButton.position(width/2, height/2 + 170);
 }
