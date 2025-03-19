@@ -57,12 +57,9 @@ let fruitImages = {};
 // Fruit game variables
 let circles = [];  // holds all fruit objects
 const restitution = 0.1;
-
-// New fixedSizes: starting at 20, increasing by 3 up to 128.
-const fixedSizes = [20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95, 98, 101, 104, 107, 110, 113, 116, 119, 122, 125, 128];
-const maxSize = 128;
-// Spawnable sizes: use the first five sizes.
-let spawnableSizes = [20, 23, 26, 29, 32];
+const fixedSizes = [20,23,26,29,32,35,38,41,44,47,50,53,56,59,62,65,68,71,74,77,80,83,86]; // starting at 20, incrementing by 3
+const maxSize = 86;
+let spawnableSizes = [20,23,26,29,32];
 
 // Language and fruit data
 let languageBG = {
@@ -109,21 +106,7 @@ let fruitMaps = {
     77: ["papaya"],
     80: ["coconut"],
     83: ["watermelon"],
-    86: [""],
-    89: [""],
-    92: [""],
-    95: [""],
-    98: [""],
-    101: [""],
-    104: [""],
-    107: [""],
-    110: [""],
-    113: [""],
-    116: [""],
-    119: [""],
-    122: [""],
-    125: [""],
-    128: [""]
+    86: [""]
   },
   jp: {
     20: ["ブルーベリー","buru-beri"],
@@ -148,21 +131,7 @@ let fruitMaps = {
     77: ["パパイヤ","万寿果","papaiya"],
     80: ["ココナッツ","kokonattsu"],
     83: ["スイカ","水瓜","西柿","suika"],
-    86: [""],
-    89: [""],
-    92: [""],
-    95: [""],
-    98: [""],
-    101: [""],
-    104: [""],
-    107: [""],
-    110: [""],
-    113: [""],
-    116: [""],
-    119: [""],
-    122: [""],
-    125: [""],
-    128: [""]
+    86: [""]
   },
   id: {
     20: ["beri biru"],
@@ -170,7 +139,7 @@ let fruitMaps = {
     26: ["leci"],
     29: ["stroberi"],
     32: ["kiwi"],
-    35: ["lemon","limun"],
+    35: ["lemon", "limun"],
     38: ["manggis"],
     41: ["markisa"],
     44: ["persik"],
@@ -187,21 +156,7 @@ let fruitMaps = {
     77: ["pepaya"],
     80: ["kelapa"],
     83: ["semangka"],
-    86: [""],
-    89: [""],
-    92: [""],
-    95: [""],
-    98: [""],
-    101: [""],
-    104: [""],
-    107: [""],
-    110: [""],
-    113: [""],
-    116: [""],
-    119: [""],
-    122: [""],
-    125: [""],
-    128: [""]
+    86: [""]
   },
   ms: {
     20: ["blueberry"],
@@ -226,21 +181,7 @@ let fruitMaps = {
     77: ["betik"],
     80: ["kelapa"],
     83: ["tembikai"],
-    86: [""],
-    89: [""],
-    92: [""],
-    95: [""],
-    98: [""],
-    101: [""],
-    104: [""],
-    107: [""],
-    110: [""],
-    113: [""],
-    116: [""],
-    119: [""],
-    122: [""],
-    125: [""],
-    128: [""]
+    86: [""]
   },
   zh: {
     20: ["蓝莓"],
@@ -265,21 +206,7 @@ let fruitMaps = {
     77: ["木瓜"],
     80: ["椰子"],
     83: ["西瓜"],
-    86: [""],
-    89: [""],
-    92: [""],
-    95: [""],
-    98: [""],
-    101: [""],
-    104: [""],
-    107: [""],
-    110: [""],
-    113: [""],
-    116: [""],
-    119: [""],
-    122: [""],
-    125: [""],
-    128: [""]
+    86: [""]
   },
   kr: {
     20: ["블루베리"],
@@ -304,21 +231,7 @@ let fruitMaps = {
     77: ["파파야"],
     80: ["코코넛"],
     83: ["수박"],
-    86: [""],
-    89: [""],
-    92: [""],
-    95: [""],
-    98: [""],
-    101: [""],
-    104: [""],
-    107: [""],
-    110: [""],
-    113: [""],
-    116: [""],
-    119: [""],
-    122: [""],
-    125: [""],
-    128: [""]
+    86: [""]
   }
 };
 
@@ -345,64 +258,35 @@ let fruitPoints = {
   77: 105,
   80: 110,
   83: 115,
-  86: 120,
-  89: 125,
-  92: 130,
-  95: 135,
-  98: 140,
-  101: 145,
-  104: 150,
-  107: 155,
-  110: 160,
-  113: 165,
-  116: 170,
-  119: 175,
-  122: 180,
-  125: 185,
-  128: 190
+  86: 120
 };
 
-let currentFruit = null;  // ensure currentFruit is declared
+let currentFruit = null;
 
-// Fixed buoyancy values based on fruit size (linear decrease from 0.54 at 20 to ~0.11 at 128)
 let fixedBuoyancy = {
   20: 0.54,
-  23: 0.53,
-  26: 0.52,
-  29: 0.50,
-  32: 0.49,
-  35: 0.48,
-  38: 0.47,
-  41: 0.46,
-  44: 0.44,
-  47: 0.43,
-  50: 0.42,
-  53: 0.41,
-  56: 0.40,
-  59: 0.38,
-  62: 0.37,
-  65: 0.36,
-  68: 0.35,
-  71: 0.34,
-  74: 0.32,
-  77: 0.31,
-  80: 0.30,
-  83: 0.29,
-  86: 0.28,
-  89: 0.26,
-  92: 0.25,
-  95: 0.24,
-  98: 0.23,
-  101: 0.22,
-  104: 0.20,
-  107: 0.19,
-  110: 0.18,
-  113: 0.17,
-  116: 0.16,
-  119: 0.14,
-  122: 0.13,
-  125: 0.12,
-  128: 0.11
+  23: 0.52,
+  26: 0.50,
+  29: 0.48,
+  32: 0.46,
+  35: 0.44,
+  38: 0.42,
+  41: 0.40,
+  44: 0.38,
+  47: 0.36,
+  50: 0.34,
+  53: 0.32,
+  56: 0.30,
+  59: 0.28,
+  62: 0.26,
+  65: 0.24,
+  68: 0.22,
+  71: 0.20,
+  74: 0.18,
+  77: 0.16,
+  80: 0.14,
+  83: 0.12,
+  86: 0.10
 };
 
 // ----- Water Simulation Globals -----
@@ -418,14 +302,14 @@ let tiltOffset = 0;
 let gravityX = 0;
 let gravityY = gravity;
 
+
 // ----- Preload Assets -----
 function preload() {
-  // Load both normal and "ow" images for each fruit.
+  // Load both normal and "ow" images for each fruit from subfolders.
   for (let size of fixedSizes) {
     let fruitNameArr = fruitMaps['en'][size];
     if (fruitNameArr && fruitNameArr[0]) {
       let name = fruitNameArr[0];
-      // Images are now in subfolders:
       fruitImages[name] = loadImage('normtextures/' + name + '.png');
       fruitImages[name + "_ow"] = loadImage('owtextures/' + name + '_ow.png');
     }
@@ -440,6 +324,7 @@ function preload() {
 
 // ----- Setup -----
 function setup() {
+
   cnv = createCanvas(windowWidth, windowHeight);
   cnv.elt.style.zIndex = '0';
   document.body.style.margin = '0';
@@ -455,43 +340,45 @@ function setup() {
   
   if (menuActive) {
     startButton = createButton('Start');
-    startButton.position(width/2, height/2);
-    startButton.style('transform', 'translate(-50%, -50%)');
-    startButton.style('z-index', '1000');
+    startButton.position(width/2, height/2 + 50);
+    startButton.class('ui-button  centered');
     startButton.mousePressed(startGame);
   
     menuFunModeButton = createButton('Mode: ' + modeNames[currentModeIndex]);
-    menuFunModeButton.position(width/2, height/2 + 50);
+    menuFunModeButton.position(width/2, height/2 + 110);
+    menuFunModeButton.class('ui-button  centered');
     menuFunModeButton.mousePressed(toggleMode);
-    menuFunModeButton.style('z-index', '1000');
-    menuFunModeButton.style('transform', 'translate(-50%, -50%)');
+
   
     menuLanguageButton = createButton('Language: ' + languageNames[currentLanguage]);
-    menuLanguageButton.position(width/2, height/2 + 100);
+    menuLanguageButton.position(width/2, height/2 + 170);
+    menuLanguageButton.class('ui-button  centered');
     menuLanguageButton.mousePressed(toggleLanguage);
-    menuLanguageButton.style('z-index', '1000');
-    menuLanguageButton.style('transform', 'translate(-50%, -50%)');
+
   }
   
   funToggleButton = createButton('Mode: ' + modeNames[currentModeIndex]);
-  funToggleButton.position(20, 480);
+  funToggleButton.position(20, 655);
+  funToggleButton.class('alt-ui-button');
   funToggleButton.mousePressed(toggleMode);
   funToggleButton.style('z-index', '1000');
   funToggleButton.hide();
   
   languageToggleButton = createButton('Language: ' + languageNames[currentLanguage]);
-  languageToggleButton.position(20, 520);
+  languageToggleButton.position(20, 710);
+  languageToggleButton.class('alt-ui-button');
   languageToggleButton.mousePressed(toggleLanguage);
   languageToggleButton.style('z-index', '1000');
   languageToggleButton.hide();
   
   answerInput = createInput();
   answerInput.position(width/2, height/5);
-  answerInput.style('transform', 'translateX(-50%)');
+  answerInput.id('answerInput');
   let placeholderText = 'Type fruit name in ' + languageNames[currentLanguage];
   answerInput.attribute('placeholder', placeholderText);
   let w = textWidth(placeholderText) + 40;
   answerInput.style('width', '250px');
+  answerInput.style('transform', 'translate(-50%, -50%)');
   answerInput.style('font-size', '18px');
   answerInput.style('z-index', '1000');
   answerInput.hide();
@@ -503,6 +390,7 @@ function setup() {
   
   enableGyroButton = createButton('Enable Gyro');
   enableGyroButton.position(10, 10);
+  enableGyroButton.class('alt-ui-button');
   enableGyroButton.mousePressed(requestDeviceOrientationPermission);
 }
 
@@ -664,7 +552,7 @@ function draw() {
       }
     }
     
-    // Draw fruit image (if "ow" was triggered, use that image)
+    // Draw fruit image (use "ow" image if recently pressed)
     let fruitName = fruitMaps['en'][circle.radius][0];
     let img;
     if (circle.owTimestamp && millis() - circle.owTimestamp < 1000) {
@@ -709,7 +597,7 @@ function draw() {
   }
   
   // 6) In Spell and Quiz modes, show hint after 10 seconds
-  if (currentFruit && (currentModeIndex === 0 || currentModeIndex === 2) && millis() - hintStartTime >= 10000) {
+  if (currentFruit && (currentModeIndex === 0 || currentModeIndex === 2) && millis() - hintStartTime >= 12000) {
     if (!currentFruit.hinted) {
       currentFruit.hinted = true;
     }
@@ -814,11 +702,11 @@ function draw() {
       choices = shuffle(choices);
       
       // Arrange 4 buttons in 2 rows (2 per row)
-      let horizontalSpacing = 160;  // adjust horizontal spacing as desired
-      let verticalSpacing = 50;     // adjust vertical spacing as desired
+      let horizontalSpacing = 160;  // adjust for horizontal spacing
+      let verticalSpacing = 50;     // adjust for vertical spacing
       let startX = width / 2 - 100 - horizontalSpacing / 2;
-      let startY_top = height / 2 - 140 - verticalSpacing / 2;
-      let startY_bottom = height / 2 - 140 + verticalSpacing / 2;
+      let startY_top = height / 2 - 245 - verticalSpacing / 2;
+      let startY_bottom = height / 2 - 245 + verticalSpacing / 2;
       
       for (let i = 0; i < choices.length; i++) {
         let btn = createButton(choices[i]);
@@ -831,19 +719,27 @@ function draw() {
           y = startY_bottom;
         }
         btn.position(x, y);
+        btn.class('alt-ui-button');
         btn.style('z-index', '1000');
         btn.style('background', 'none');
         btn.style('width', '200px');
         btn.style('text-align', 'center');
         btn.style('border', 'none');
-        btn.style('font-size', '20px');
-        btn.style('font-weight', 'bold');
-        // Set random dark text color:
+        btn.style('font-size', '24px');
+        // Set a random dark text color:
         let r = floor(random(0, 150));
         let g = floor(random(0, 150));
         let b = floor(random(0, 150));
         btn.style('color', `rgb(${r},${g},${b})`);
         btn.mousePressed(() => {
+          
+           if (currentFruit && currentFruit.hinted) {
+    for (let b of choiceButtons) { b.remove(); }
+    choiceButtons = [];
+    currentFruit = null;
+    return;
+  }
+          
           if (btn.html().toLowerCase() === correctAnswer.toLowerCase()) {
             if (correctSound) { correctSound.play(); }
             currentScore += fruitPoints[currentFruit.radius];
@@ -971,11 +867,11 @@ function requestDeviceOrientationPermission() {
 function drawMenu() {
   let bgColor = languageBG[currentLanguage];
   background(bgColor[0], bgColor[1], bgColor[2]);
-  let scaleFactor = 0.1;
+  let scaleFactor = 0.15;
   let logoWidth = logo.width * scaleFactor;
   let logoHeight = logo.height * scaleFactor;
   let logoX = width/2 - logoWidth/2;
-  let logoY = height/4 - logoHeight/2;
+  let logoY = height/3 - logoHeight/2;
   image(logo, logoX, logoY, logoWidth, logoHeight);
 }
 
