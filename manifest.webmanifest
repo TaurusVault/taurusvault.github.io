@@ -10,6 +10,11 @@
   "theme_color": "#ffffff",
 
   "display": "standalone", 
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "window_controls_overlay": {
+    "enabled": true,
+    "auto_extend": true
+  },
 
   "icons": [
     {
